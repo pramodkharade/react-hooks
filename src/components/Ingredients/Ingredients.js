@@ -1,11 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import IngredientList from './IngredientList';
 import IngredientForm from './IngredientForm';
 import Search from './Search';
 
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
-
+  useEffect(() => {
+    fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json')
+      .then(res => {
+        return res.json();
+      })
+      .then((resData) => {
+        const ingredients = [];
+        for (let key in resData) {
+          ingredients.push({
+            id: key,
+            title: resData[key].title,
+            amount: resData[key].amount,
+          });
+        }
+        console.log('GET Data', ingredients);
+        setUserIngredients(ingredients);
+      })
+      .catch(error => {
+      })
+  }, []);
   const addIngredientHandler = ingredient => {
     fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json', {
       method: 'POST',
