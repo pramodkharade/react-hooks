@@ -49,12 +49,15 @@ const Ingredients = () => {
       return prevIngredients.filter(ingredient => ingredient.id !== intgredientId);
     })
   }
+  const filterIngredients = filterIngredient => {
+    setUserIngredients(filterIngredient);
+  }
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadIngredients={filterIngredients} />
         <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientHandler} />
         { /* Need to add list here! */ }
       </section>
