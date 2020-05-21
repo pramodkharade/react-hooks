@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import IngredientList from './IngredientList';
 import IngredientForm from './IngredientForm';
 import Search from './Search';
@@ -49,9 +49,9 @@ const Ingredients = () => {
       return prevIngredients.filter(ingredient => ingredient.id !== intgredientId);
     })
   }
-  const filterIngredients = filterIngredient => {
+  const filterIngredients = useCallback(filterIngredient => {
     setUserIngredients(filterIngredient);
-  }
+  }, []);
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />

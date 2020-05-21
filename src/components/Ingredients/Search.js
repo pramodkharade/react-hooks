@@ -7,8 +7,10 @@ const Search = React.memo(props => {
   const [enteredFilter, setFilter] = useState('');
   const {onLoadIngredients} = props;
   useEffect(() => {
-    const queryParam = enteredFilter.length === 0 ? '' : `?orderBy="title"&equalTo=${enteredFilter}`;
-    fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json' + queryParam)
+    const query = enteredFilter.length === 0
+      ? ''
+      : `?orderBy="title"&equalTo="${enteredFilter}"`;
+    fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json' + query)
       .then(res => res.json())
       .then(resData => {
         const loadingredients = [];
