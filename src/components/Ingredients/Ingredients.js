@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import IngredientList from './IngredientList';
 import IngredientForm from './IngredientForm';
 import Search from './Search';
+import ErrorModal from '../UI/ErrorModal';
 
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
   const [isloading, setLoading] = useState(false);
+  const [error, setError] = useState();
   useEffect(() => {
     fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json')
       .then(res => {
@@ -24,6 +26,8 @@ const Ingredients = () => {
         setUserIngredients(ingredients);
       })
       .catch(error => {
+        setError('Something went wrong');
+        setLoading(false);
       })
   }, []);
   const addIngredientHandler = ingredient => {
@@ -45,6 +49,10 @@ const Ingredients = () => {
           }
         ])
       })
+      .catch(error => {
+        setError('Something went wrong');
+        setLoading(false);
+      });
 
   };
   const removeIngredientHandler = intgredientId => {
@@ -59,14 +67,20 @@ const Ingredients = () => {
         })
       })
       .catch(error => {
-
+        setError('Something went wrong');
+        setLoading(false);
       });
   }
   const filterIngredients = useCallback(filterIngredient => {
     setUserIngredients(filterIngredient);
   }, []);
+  const clearError = () => {
+    setError(null);
+
+  }
   return (
     <div className="App">
+      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
       <IngredientForm onAddIngredient={addIngredientHandler}
     loading={isloading} />
 
