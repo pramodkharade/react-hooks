@@ -5,6 +5,7 @@ import Search from './Search';
 
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
+  const [isloading, setLoading] = useState(false);
   useEffect(() => {
     fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json')
       .then(res => {
@@ -26,6 +27,7 @@ const Ingredients = () => {
       })
   }, []);
   const addIngredientHandler = ingredient => {
+    setLoading(true);
     fetch('https://react-hooks-287f0.firebaseio.com/ingredients.json', {
       method: 'POST',
       body: JSON.stringify(ingredient),
@@ -35,6 +37,7 @@ const Ingredients = () => {
     })
       .then(res => res.json())
       .then(resdata => {
+        setLoading(false);
         setUserIngredients(prevState => [
           ...prevState,
           {
@@ -45,10 +48,12 @@ const Ingredients = () => {
 
   };
   const removeIngredientHandler = intgredientId => {
+    setLoading(true);
     fetch(`https://react-hooks-287f0.firebaseio.com/ingredients/${intgredientId}.json`, {
       method: 'DELETE'
     })
       .then((res) => {
+        setLoading(false);
         setUserIngredients(prevIngredients => {
           return prevIngredients.filter(ingredient => ingredient.id !== intgredientId);
         })
@@ -62,7 +67,8 @@ const Ingredients = () => {
   }, []);
   return (
     <div className="App">
-      <IngredientForm onAddIngredient={addIngredientHandler} />
+      <IngredientForm onAddIngredient={addIngredientHandler}
+    loading={isloading} />
 
       <section>
         <Search onLoadIngredients={filterIngredients} />
